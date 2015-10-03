@@ -88,9 +88,9 @@ class Upfront_Template_Builder
 
 		foreach($exportRegions as $region)
 		{
-			$codeOutput .= '$'.$region["name"].' = upfront_create_region('.var_export($region,true).');
+			$codeOutput .= '$'.str_replace("-","_",$region["name"]).' = upfront_create_region('.var_export($region,true).');
 
-$regions->add($'.$region["name"].');
+$regions->add($'.str_replace("-","_",$region["name"]).');
 
 ';
 		}
