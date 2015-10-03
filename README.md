@@ -11,7 +11,7 @@ I got fed up typing arrays out so I made this so I can just build the layout in 
 
 I haven't really tested this much but it seems to work.  Please let me know if you have any issues as I am using this on my own site.
 
-** You will have to manage updating the child theme class and global settings yourself if you want to make a completely new child theme.  I will get around to building a property merger later on if I get time **
+**You will have to manage updating the child theme class and global settings yourself if you want to make a completely new child theme.  I will get around to building a property merger later on if I get time**
 
 ## Instructions
 
