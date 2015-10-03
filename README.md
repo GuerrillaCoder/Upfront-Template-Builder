@@ -1,3 +1,5 @@
+**NOTICE: I found some bugs with this approach. You should probably give it a few days before trying it out**
+
 # Upfront-Template-Builder
 Helps generate the PHP layout files for Upfront child themes
 
