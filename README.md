@@ -1,4 +1,4 @@
-**UPDATE: Success!  Got it working smoothly.  I will update the code and readme in a few mins**
+**UPDATE: I've tested this and it looks like it is working correclty.  The only issue would be if WPMUDev change the Upfront_virtual_region class and it breaks the override.  I started a thread here: https://premium.wpmudev.org/forums/topic/upfront_virtual_region-class-not-adding-modules-and-wrappers#post-962941 hopefully a developer will give an opinion on the approach**
 
 # Upfront-Template-Builder
 Helps generate the PHP layout files for Upfront child themes
