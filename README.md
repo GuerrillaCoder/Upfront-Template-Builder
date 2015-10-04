@@ -1,4 +1,4 @@
-**UPDATE: Extending class methods works perfectly but the routing is not working on the ajax request.  I think this is to do with the template-name: <number> entries in the options table.  Once I figure that out it should be all good.**
+**UPDATE: Success!  Got it working smoothly.  I will update the code and readme in a few mins**
 
 # Upfront-Template-Builder
 Helps generate the PHP layout files for Upfront child themes
