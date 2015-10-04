@@ -23,3 +23,62 @@ I haven't really tested this much but it seems to work.  Please let me know if y
 4. Copy the PHP to your layout file
 
 Let me know if you find it useful and would like something added.
+
+# Setting up layout files:
+
+## Update functions.php to allow us to add an existing region
+
+in your child themes functions.php file add this class.  This will allow us to add in regions that already have data for wrappers and modules:
+
+```php
+class Upfront_Virtual_Region_From_Existing extends Upfront_Virtual_Region
+{
+    public function __construct ($args, $properties = array()) {
+
+        $this->modules = $args["modules"];
+        $this->wrappers = $args["wrappers"];
+
+        parent::__construct($args, $properties);
+    }
+}
+```
+
+## Creating template file
+Add template file to the root of the theme named: page_tpl-{name}.php (replace "{name}" with the name for your template).
+
+Add this code to the page:
+
+```php
+<?php
+/**
+ * Template Name: {name} Page template
+ *
+ * @package WordPress
+ * @subpackage {name}
+ */
+
+the_post();
+$layout = Upfront_Output::get_layout(array('specificity' => 'single-page-{name}'));
+
+get_header();
+echo $layout->apply_layout();
+get_footer();
+```
+
+## Update your required pages in settings.php
+
+Settings.php has an associative array.  You need to find:
+```
+required_pages' => '{...}',
+```
+You need to append this entry for your template:
+
+```
+required_pages' => '{... existing entries ..},{\\"yourTemplateName\\":{\\"name\\":\\"yourTemplateName\\",\\"slug\\":\\"yourTemplateName\\",\\"layout\\":\\"single-page-yourTemplateName\\"}',
+```
+
+## Add Your layout file
+
+In your themes layouts folder create a php file called single-page-{name}.php.
+
+You can now paste the output from the plugin into this file and you should have a working template.
