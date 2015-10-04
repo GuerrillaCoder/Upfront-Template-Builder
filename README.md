@@ -1,4 +1,4 @@
-**UPDATE: I understand the issue now a lot better.  The developers have tried to replicate the jacascript functionality of creating wrappers in the "template api".  This interferes with just grabbing already created wrappers and using them.  I think I could override the Upfront_Virtual_Region class to accept a direct Json input but this might be problematic with furture updates.  I think perhaps it is better not to follow the current child theme structure and instead make my own child theme that works direct from Json without all this messing about trying to fit in with an incomplete API that is subject to change**
+**UPDATE: Extending class methods works perfectly but the routing is not working on the ajax request.  I think this is to do with the template-name: <number> entries in the options table.  Once I figure that out it should be all good.**
 
 # Upfront-Template-Builder
 Helps generate the PHP layout files for Upfront child themes
