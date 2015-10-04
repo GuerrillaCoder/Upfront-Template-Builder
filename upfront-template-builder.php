@@ -49,54 +49,81 @@ class Upfront_Template_Builder
 	function upfront_template_helper_admin_page()
 	{
 		$specificity = $_POST["template"];
-
-		$layout_ids = array(
-			'specificity' => $specificity
-		);
-
-		$layout = Upfront_Layout::from_entity_ids($layout_ids);
-		$storageKey = $layout->get_storage_key();
-		$layout_data = $layout->to_php();
-
-
-		$regionNames = array();
-		$regionForm = "";
-
-		foreach($layout_data["regions"] as $region)
-		{
-			$regionNames[$region["name"]] = $region["title"];
-
-			$regionForm .= '<div class="region-check"><label for="'.$region["name"].'">'.$region["title"].'</label><input type="checkbox" id="'.$region["name"].'" name="'.$region["name"].'"> </div>
-			';
-		}
-
-		$exportRegionNames = array();
-		foreach($_POST as $key => $value)
-		{
-			if ($value == 'on') $exportRegionNames[] = $key;
-		}
-		$exportRegions = array();
-		foreach($layout_data["regions"] as $region)
-		{
-			if(in_array($region["name"],$exportRegionNames))
-			{
-				$exportRegions[] = $region;
-			}
-		}
+		$json_data = array();
 		$codeOutput = "";
-		// create php output
+		$storageKey = "";
 
-		foreach($exportRegions as $region)
+		if ($specificity != "")
 		{
-			$codeOutput .= '$'.str_replace("-","_",$region["name"]).' = upfront_create_region('.var_export($region,true).');
+			$layout_ids = array(
+				'specificity' => $specificity
+			);
 
-$regions->add($'.str_replace("-","_",$region["name"]).');
 
+			$layout = Upfront_Layout::from_entity_ids($layout_ids);
+			$storageKey = $layout->get_storage_key();
+//		$layout_data = $layout->to_php();
+//		$properties = $layout->get_layout_properties();
+
+			$regionNames = array();
+			$regionForm = "";
+
+			// EDIT:: I have changed it to load directly from the database because the Upfront classes merge data with global settings and it causes trouble
+			$json_data = json_decode( get_option($storageKey.'-'.$specificity, json_encode(array())), true );
+
+			foreach($json_data["regions"] as $region)
+			{
+				$regionNames[$region["name"]] = $region["title"];
+
+				$regionForm .= '<div class="region-check"><label for="'.$region["name"].'">'.$region["title"].'</label><input type="checkbox" id="'.$region["name"].'" name="'.$region["name"].'"> </div>
+			';
+			}
+
+			$exportRegionNames = array();
+			foreach($_POST as $key => $value)
+			{
+				if ($value == 'on') $exportRegionNames[] = $key;
+			}
+			$exportRegions = array();
+			foreach($json_data["regions"] as $region)
+			{
+				if(in_array($region["name"],$exportRegionNames))
+				{
+					$exportRegions[] = $region;
+				}
+			}
+			$codeOutput = "";
+			// create php output
+			// create region args & properties
+			//
+			foreach($exportRegions as $region)
+			{
+				$properties = $region["properties"];
+				$modules = $region["modules"];
+				$wrappers = $region["wrappers"];
+
+				//unset($region["properties"]);
+				//unset($region["modules"]);
+				//unset($region["wrappers"]);
+
+				$codeOutput .= '$'.str_replace("-","_",$region["name"]).' = new Upfront_Virtual_Region_From_Existing('.var_export($region,true).');
 ';
+
+				// this doesn't work becuase it is expecting values to build its own wrappers, not pre-exisiting wrappers
+//				foreach($modules as $module)
+//				{
+//					$codeOutput .= '$'.str_replace("-","_",$region["name"]).'->add_element('.var_export($module,true).');
+//';
+//				}
+
+				$codeOutput .= '$regions->add($'.str_replace("-","_",$region["name"]).');
+';
+			}
+
+
+			$codeOutput = highlight_string($codeOutput,true);
 		}
 
-
-		$codeOutput = highlight_string($codeOutput,true);
 
 		?>
 		<script>hljs.initHighlightingOnLoad();</script>
@@ -138,15 +165,15 @@ $regions->add($'.str_replace("-","_",$region["name"]).');
 			</tr>
 			<tr>
 				<td class="row-title"><label for="tablecell">Regions: </label></td>
-				<td><?php echo count($layout_data["regions"]); ?> </td>
+				<td><?php echo count($json_data["regions"]); ?> </td>
 			</tr>
 			<tr>
 				<td class="row-title"><label for="tablecell">Properties: </label></td>
-				<td><?php echo count($layout_data["properties"]); ?> </td>
+				<td><?php echo count($json_data["properties"]); ?> </td>
 			</tr>
 			<tr>
 				<td class="row-title"><label for="tablecell">Wrappers: </label></td>
-				<td><?php echo count($layout_data["wrappers"]); ?> </td>
+				<td><?php echo count($json_data["wrappers"]); ?> </td>
 			</tr>
 			</tbody>
 		</table>
