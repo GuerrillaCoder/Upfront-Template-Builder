@@ -1,4 +1,4 @@
-**NOTICE: I found some bugs with this approach. You should probably give it a few days before trying it out**
+**UPDATE: I need to tidy up the arrays a lot.  Check back in a day or two for the working version**
 
 # Upfront-Template-Builder
 Helps generate the PHP layout files for Upfront child themes
